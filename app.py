@@ -2,12 +2,14 @@ from flask import Flask, render_template, request
 import requests
 import random
 from bs4 import BeautifulSoup
+import csv
+import datetime
 
 app = Flask(__name__)
 
 @app.route("/")
 def hello():
-    return "Hello World!"
+    return render_template('home.html')
     
 @app.route("/welcome")
 def welcome():
@@ -91,6 +93,37 @@ def opgg():
     url='http://www.op.gg/summoner/userName='+summon
     html = requests.get(url).text
     soup = BeautifulSoup(html,'html.parser')
-    win = soup.select_one('#SummonerLayoutContent > div.tabItem.Content.SummonerLayoutContent.summonerLayout-summary > div.SideContent > div.TierBox.Box > div.SummonerRatingMedium > div.TierRankInfo > div.TierInfo > span.WinLose > span.wins').text
-    lose = soup.select_one('#SummonerLayoutContent > div.tabItem.Content.SummonerLayoutContent.summonerLayout-summary > div.SideContent > div.TierBox.Box > div.SummonerRatingMedium > div.TierRankInfo > div.TierInfo > span.WinLose > span.losses').text
-    return render_template('opgg.html', win=win, lose=lose,summon=summon)
+    win = soup.select('#SummonerLayoutContent > div.tabItem.Content.SummonerLayoutContent.summonerLayout-summary > div.SideContent > div.TierBox.Box > div.SummonerRatingMedium > div.TierRankInfo > div.TierInfo > span.WinLose > span.wins')
+    lose = soup.select('#SummonerLayoutContent > div.tabItem.Content.SummonerLayoutContent.summonerLayout-summary > div.SideContent > div.TierBox.Box > div.SummonerRatingMedium > div.TierRankInfo > div.TierInfo > span.WinLose > span.losses')
+    
+    if len(win) == 0:
+        win_i = "0승"
+    else :
+        win_i = win[0].text
+    
+    if len(lose)==0:
+        lose_i='0패'
+    else:
+        lose_i = lose[0].text
+        
+        
+    # f = open("list.txt",'a+')
+    # data = '소환사의 이름은 {} {} {} 입니다.'.format(summon, win_i, lose_i)
+    # f.write(data)
+    # f.close()
+    
+    f = open('list.csv','a+', encoding='utf-8', newline='')
+    csvfile = csv.writer(f)
+    data=[summon, win_i, lose_i, datetime.datetime.now()]
+    csvfile.writerow(data)
+    f.close()
+    
+    return render_template('opgg.html', win=win_i, lose=lose_i,summon=summon)
+    
+@app.route('/log')
+def log():
+    f = open('list.csv','r', encoding='utf-8')
+    logs = csv.reader(f)
+    
+    return render_template('log.html', logs=logs)
+    
