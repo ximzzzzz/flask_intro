@@ -10,7 +10,8 @@
 <body>
     <div class="container">
             <nav class="navbar navbar-expand-xl navbar-dark bg-primary">
-      <a class="navbar-brand" href="/">MY site</a>
+      <a class="navbar-brand" href="/"><img src="http://pngimg.com/uploads/letter_g/letter_g_PNG43.png" width=30 height=30></img>
+        Goddata</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -32,10 +33,13 @@
          
          </div>
         </nav>
-        
-        {% block body_block %}
-        
-        {% endblock %}
+        <div class="jumbotron">
+          <h1 class="display-4">{% block head_block %}{% endblock %}</h1>
+          <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+          <hr class="my-4">
+          {% block body_block %}
+          {% endblock %}
+        </div>
         
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

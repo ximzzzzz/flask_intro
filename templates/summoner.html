@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
-    
+{% block head_block %}
+    Put Summoner's name
+    {% endblock %}
+
 {% block body_block %}
-    <h1>put SUMMONER's name </h1>
+    
     <form action='/opgg'>
         <input type="text" name="summoner"/>
         <input type="submit" value="Submit"/>
